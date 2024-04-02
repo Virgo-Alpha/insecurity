@@ -18,15 +18,14 @@ $admin = false;
 
 // Processing form data when form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    // Check if username is empty
+    // Sanitize and validate username
     if(empty(trim($_POST["username"]))){
         $username_err = "Please enter your username.";
     } else{
         $username = trim($_POST["username"]);
     }
 
-    // Check if password is empty
+    // Sanitize and validate password
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter your password.";
     } else{
@@ -35,14 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate credentials
     if (empty($username_err) && empty($password_err)){
-        // Prepare a select statement
-        $sql = "SELECT id, username, password, admin FROM users WHERE username = ?";
-
-        if ($stmt = $mysqli->prepare($sql)){
+        // Prepare a select statement with prepared statements
+        $stmt = $mysqli->prepare("SELECT id, username, password, admin FROM users WHERE username = ?");
+        if ($stmt){
             // Bind variables to the prepared statement as parameters
             $stmt->bind_param("s", $param_username);
-
-            // Set parameters
             $param_username = $username;
 
             // Attempt to execute the prepared statement
@@ -55,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Bind result variables
                     $stmt->bind_result($id, $username, $hashed_password, $admin);
                     if ($stmt->fetch()) {
-                        if (md5($password) == $hashed_password) {
+                        if (password_verify($password, $hashed_password)) { // Using password_verify instead of md5
                             // Store data in session variables
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
@@ -63,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["admin"] = $admin;
                             // Redirect user to welcome page
                             header("location: index.php");
+                            exit();
                         } else {
                             // Display an error message if password is not valid
                             $password_err = "That username and password don't match :(";
@@ -99,10 +96,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 <div class="wrapper-login misty">
     <h2>Login</h2>
-    <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="post">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
         <div class="form-group <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
             <label>Username</label>
-            <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
+            <input type="text" name="username" class="form-control" value="<?php echo htmlspecialchars($username); ?>">
             <span class="help-block"><?php echo $username_err; ?></span>
         </div>
         <div class="form-group <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
