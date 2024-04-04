@@ -17,7 +17,7 @@ The Insecurity web application was developed with several security vulnerabiliti
 
 ## Vulnerability Management Pipeline
 
-To address the vulnerabilities in the Insecurity web application, a vulnerability management pipeline was established. This pipeline consists of the following stages:
+To address the vulnerabilities in the Insecurity web application, a vulnerability management pipeline was established on the safe-solution branch of this repository. This pipeline consists of the following stages:
 
 1. **Discovery**: Identifying vulnerabilities through code security reviews, automated testing, and responsible disclosure programs.
 2. **Reproduction**: Reproducing vulnerabilities in a staging or System Integration Testing (SIT) environment to understand their impact.
@@ -60,7 +60,7 @@ To run the unit tests for the Insecurity web application, follow these steps:
 2. Run the PHPUnit command:
 
 ```bash
-./vendor/bin/phpunit *SecurityTest.php
+./vendor/bin/phpunit [SecurityTest].php
 ```
 
 Feel free to further customize or expand this README as needed. If you have any questions or need additional information, please let me know!
