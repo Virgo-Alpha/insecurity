@@ -60,7 +60,7 @@ To run the unit tests for the Insecurity web application, follow these steps:
 2. Run the PHPUnit command:
 
 ```bash
-./vendor/bin/phpunit [SecurityTest].php
+./vendor/bin/phpunit [SecurityTestName].php
 ```
 
 Feel free to further customize or expand this README as needed. If you have any questions or need additional information, please let me know!
